@@ -22,5 +22,7 @@ namespace ICT638July2020Group1Android
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+
+        //123
     }
 }
