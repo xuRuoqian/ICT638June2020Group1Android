@@ -61,6 +61,8 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="activity\Fragment.cs" />
+    <Compile Include="activity\Navigation.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -123,7 +125,12 @@
     <AndroidResource Include="Resources\drawable\ic_stat_button_click.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\Navigation.xml">
+    <AndroidResource Include="Resources\layout\navigation_layout.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\fragment.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
