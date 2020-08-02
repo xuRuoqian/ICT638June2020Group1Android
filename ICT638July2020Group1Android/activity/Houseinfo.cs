@@ -12,9 +12,9 @@ using Android.Widget;
 
 namespace ICT638July2020Group1Android.activity
 {
-     class Houseinfo
+     class houseinfo
     {
-        public int houseid { get; set; }
+        public string housename { get; set; }
         public string bedroom { get; set; }
         public string lavatory { get; set; }
         public string houseaddress { get; set; }

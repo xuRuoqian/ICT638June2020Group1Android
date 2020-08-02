@@ -62,11 +62,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="activity\Customer.cs" />
+    <Compile Include="activity\Desciption.cs" />
     <Compile Include="activity\Fragment.cs" />
-    <Compile Include="activity\Houseinfo.cs" />
+    <Compile Include="activity\homelogin.cs" />
+    <Compile Include="activity\houseinfo.cs" />
     <Compile Include="activity\Navigation.cs" />
     <Compile Include="activity\register.cs" />
-    <Compile Include="activity\renthouseAdapter.cs" />
     <Compile Include="activity\houselist1.cs" />
     <Compile Include="activity\renthouseAdapter1.cs" />
     <Compile Include="MainActivity.cs" />
@@ -145,6 +146,12 @@
   <ItemGroup>
     <Content Include="ICT638June2020Group1Android.csproj.user" />
     <AndroidResource Include="Resources\layout\renthouselist.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\desciption.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\homelogin.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

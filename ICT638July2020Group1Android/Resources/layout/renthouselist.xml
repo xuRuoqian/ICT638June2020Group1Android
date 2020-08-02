@@ -1,49 +1,21 @@
-
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:orientation="vertical">
+    
+  <ListView
+        android:id="@+id/mylistview"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
 
-   <TextView  
-    android:id="@+id/renthouselist"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/abc_select_dialog_padding_start_material"
-    android:textSize="@dimen/abc_text_size_body_1_material"/>
-
-
-
-   <TextView  
-    android:id="@+id/renthouselist3"
+    <TextView  android:id="@+id/renthouselist"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_weight="25"
+        android:clickable="true"
     android:padding="@dimen/abc_select_dialog_padding_start_material"
     android:textSize="@dimen/abc_text_size_body_1_material"/>
 
-      <TextView  
-    android:id="@+id/renthouselist4"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_weight="25"
-    android:padding="@dimen/abc_select_dialog_padding_start_material"
-    android:textSize="@dimen/abc_text_size_body_1_material"/>
-
-          <TextView  
-    android:id="@+id/renthouselist5"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_weight="25"
-    android:padding="@dimen/abc_select_dialog_padding_start_material"
-    android:textSize="@dimen/abc_text_size_body_1_material"/>
-
-          <TextView  
-    android:id="@+id/renthouselist6"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_weight="25"
-    android:padding="@dimen/abc_select_dialog_padding_start_material"
-    android:textSize="@dimen/abc_text_size_body_1_material"/>
 
 
 </LinearLayout>

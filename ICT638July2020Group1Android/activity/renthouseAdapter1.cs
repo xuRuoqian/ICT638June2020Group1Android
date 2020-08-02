@@ -12,31 +12,41 @@ using Android.Widget;
 
 namespace ICT638July2020Group1Android.activity
 {
-    class renthouseAdapter1 : BaseAdapter<Person>
+    class renthouseAdapter1 : BaseAdapter
     {
-        private List<Person> mitems;
-        Context context;
+        string [] mitems;
+        private List<houseinfo> mItems;
+        Activity context;
+        private houselist1 houselist1;
 
-        public renthouseAdapter1(Context context, List<Person> mmitems)
+        public renthouseAdapter1(Activity context, string[] mmitems)
         {
             this.context = context;
             mitems = mmitems;
         }
-        public override int Count
+
+        public renthouseAdapter1(houselist1 houselist1, List<houseinfo> mItems)
         {
-            get { return mitems.Count; }
+            this.houselist1 = houselist1;
+            this.mItems = mItems;
         }
 
+        public override int Count
+        {
+            get { return mitems.Length; }
+        }
+
+        public override Java.Lang.Object GetItem(int position)
+        {
+            return mitems[position];
+        }
 
         public override long GetItemId(int position)
         {
             return position;
         }
 
-        public override Person this[int position]
-        {
-            get { return mitems[position]; }
-        }
+
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
             View row = convertView;
@@ -44,10 +54,12 @@ namespace ICT638July2020Group1Android.activity
 
             if (row == null)
             {
-                row = LayoutInflater.From(context).Inflate(Resource.Layout.renthouselist, null, false);
+                row = context.LayoutInflater.Inflate(Resource.Layout.renthouselist, null);
             }
-            return row;
+            row.FindViewById<TextView>(Resource.Id.renthouselist).Text = mitems[position];
 
+
+            return row;
 
         }
     }

@@ -14,7 +14,9 @@ namespace ICT638July2020Group1Android
             base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             // Set our view from the "main" layout resource
-            SetContentView(Resource.Layout.renthouselist);
+            SetContentView(Resource.Layout.homelogin);
+          //  Android.Support.V7.Widget.Toolbar toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.toolbar);
+           // SetSupportActionBar(toolbar);
             //566565665656
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
