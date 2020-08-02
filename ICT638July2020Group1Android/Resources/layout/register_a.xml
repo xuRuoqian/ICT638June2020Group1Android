@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/custom_register"
+        android:text="@string/customer_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+    <TextView
+        android:id="@+id/customers_firstname"
+        android:text="@string/customer_firstname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/custom_firstname"
+        android:hint="@string/customer_firstname"
+        android:inputType="text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+    <TextView
+        android:id="@+id/customers_lastname"
+        android:text="@string/customer_lastname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+     <EditText
+        android:id="@+id/custom_lastname"
+        android:hint="@string/customer_lastname"
+        android:inputType="text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+     <TextView
+        android:id="@+id/customers_username"
+        android:text="@string/customer_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+     <EditText
+        android:id="@+id/custom_username"
+        android:hint="@string/customer_username"
+        android:inputType="text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+     <TextView
+        android:id="@+id/customers_address"
+        android:text="@string/customer_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+     <EditText
+        android:id="@+id/custom_address"
+        android:hint="@string/customer_address"
+        android:inputType="text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+     <TextView
+        android:id="@+id/customers_phonenumber"
+        android:text="@string/customer_phonenumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+     <EditText
+        android:id="@+id/custom_phonenumber"
+        android:hint="@string/customer_phonenumber"
+        android:inputType="text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+     <TextView
+        android:id="@+id/customers_country"
+        android:text="@string/customer_country"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+     <EditText
+        android:id="@+id/custom_country"
+        android:hint="@string/customer_country"
+        android:inputType="text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+     <TextView
+        android:id="@+id/customers_password"
+        android:text="@string/customer_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+     <EditText
+        android:id="@+id/custom_password"
+        android:hint="@string/customer_password"
+        android:inputType="textPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+    <Button
+        android:id="@+id/cou_register"
+        android:text="@string/cust_register"       
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/register_back"
+        android:text="@string/back"       
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

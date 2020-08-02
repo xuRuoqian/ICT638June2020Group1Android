@@ -61,8 +61,14 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="activity\Customer.cs" />
     <Compile Include="activity\Fragment.cs" />
+    <Compile Include="activity\Houseinfo.cs" />
     <Compile Include="activity\Navigation.cs" />
+    <Compile Include="activity\register.cs" />
+    <Compile Include="activity\renthouseAdapter.cs" />
+    <Compile Include="activity\houselist1.cs" />
+    <Compile Include="activity\renthouseAdapter1.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -130,6 +136,17 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\ic_stat_button_click.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\register_a.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ICT638June2020Group1Android.csproj.user" />
+    <AndroidResource Include="Resources\layout\renthouselist.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

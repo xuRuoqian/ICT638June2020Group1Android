@@ -40,29 +40,29 @@ namespace ICT638July2020Group1Android.activity
                 case Resource.Id.navigation_items:
                     textMessage.SetText(Resource.String.title_items);
                     transaction = FragmentManager.BeginTransaction();
-                    transaction.Replace(Resource.Id.fragContainer, testFragment, "Dashboard");
-                    transaction.AddToBackStack("Dashboard");
+                    transaction.Replace(Resource.Id.fragContainer, testFragment, "Items");
+                    transaction.AddToBackStack("Items");
                     transaction.Commit();
                     return true;
                 case Resource.Id.navigation_location:
                     textMessage.SetText(Resource.String.title_location);
                     transaction = FragmentManager.BeginTransaction();
-                    transaction.Replace(Resource.Id.fragContainer, testFragment, "Notifications");
-                    transaction.AddToBackStack("Dashboard");
+                    transaction.Replace(Resource.Id.fragContainer, testFragment, "Map");
+                    transaction.AddToBackStack("Map");
                     transaction.Commit();
                     return true;
                 case Resource.Id.navigation_profile:
                     textMessage.SetText(Resource.String.title_profile);
                     transaction = FragmentManager.BeginTransaction();
-                    transaction.Replace(Resource.Id.fragContainer, testFragment, "Notifications");
-                    transaction.AddToBackStack("Dashboard");
+                    transaction.Replace(Resource.Id.fragContainer, testFragment, "Profile");
+                    transaction.AddToBackStack("Profile");
                     transaction.Commit();
                     return true;
                 case Resource.Id.navigation_stat_button:
                     textMessage.SetText(Resource.String.title_stat_button);
                     transaction = FragmentManager.BeginTransaction();
                     transaction.Replace(Resource.Id.fragContainer, testFragment, "Notifications");
-                    transaction.AddToBackStack("Dashboard");
+                    transaction.AddToBackStack("Notifications");
                     transaction.Commit();
                     return true;
             }

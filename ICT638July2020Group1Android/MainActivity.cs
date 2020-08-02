@@ -14,7 +14,7 @@ namespace ICT638July2020Group1Android
             base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             // Set our view from the "main" layout resource
-            SetContentView(Resource.Layout.navigation_layout);
+            SetContentView(Resource.Layout.renthouselist);
             //566565665656
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
@@ -24,4 +24,6 @@ namespace ICT638July2020Group1Android
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
+
+
 }
