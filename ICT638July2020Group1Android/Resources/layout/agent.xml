@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:text="Name"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="57.0dp"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:id="@+id/txt_agent_name"
+         />
+
+        <TextView
+        android:text="Email Address"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="57.0dp"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:id="@+id/txt_agent_emailAddress"
+         />
+
+        <TextView
+        android:text="Phone Number"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="57.0dp"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:id="@+id/txt_agent_PhoneNum"
+         />
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+          android:id="@+id/agentmap"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          class="com.google.android.gms.maps.MapFragment" />
+
+    <Button
+        android:text="Share"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_agent_share" />
+    <Button
+        android:text="Send Message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_agent_sendMessage" />
+
+    <Button
+        android:id="@+id/btnupdateagent"
+        android:text="updateagent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
