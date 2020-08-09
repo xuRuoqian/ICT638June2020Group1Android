@@ -65,7 +65,7 @@ namespace ICT638July2020Group1Android.activity
 
         public void getAgentDetail()
         {
-            string url = "https://localhost:5001/api/Agentdetial/5";
+            string url = "https://localhost:5001/api/Agentdetial";
             var httpWebRequest = new HttpWebRequest(new Uri(url));
             //var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             httpWebRequest.ServerCertificateValidationCallback = delegate { return true; };
