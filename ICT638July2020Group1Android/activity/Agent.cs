@@ -38,7 +38,7 @@ namespace ICT638July2020Group1Android
         }
         public void getAgentDetail()
         {
-            string url = "https://10.0.2.2:5001/api/Agentdetial/"+agentid;
+            string url = "https://localhost:5001/api/Agentdetial"+agentid;
             var httpWebRequest = new HttpWebRequest(new Uri(url));
             //var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             httpWebRequest.ServerCertificateValidationCallback = delegate { return true; };
@@ -140,7 +140,7 @@ namespace ICT638July2020Group1Android
 
         public void Btnupdateagent()
         {
-            string url = "https://localhost:5001/api/agentdetials/5";
+            string url = "https://localhost:5001/api/agentdetials";
             var httpWebRequest = new HttpWebRequest(new Uri(url));
             //var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             httpWebRequest.ServerCertificateValidationCallback = delegate { return true; };
@@ -209,7 +209,7 @@ namespace ICT638July2020Group1Android
             btn_sendMessage.Click += (sender, e) =>
             {
 
-                var request = HttpWebRequest.Create(string.Format(@""));
+                var request = HttpWebRequest.Create(string.Format(@"http://localhost:5001/api/Users"));
                 request.ContentType = "application/json";
                 request.Method = "GET";
 
