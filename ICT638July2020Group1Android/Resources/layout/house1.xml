@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+      <TextView
+        android:id="@+id/txthouse1"
+        android:text="Albany 10"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+ 
+        <ImageView
+        android:id="@+id/imageView1"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/house1"
+        android:layout_below="@+id/txthouse1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+        <TextView
+        android:id="@+id/txthouse1bedroom"
+        android:layout_below="@+id/imageView1"
+        android:text="Bedroom"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+      <TextView
+        android:id="@+id/txthouse1bedroomanswer"
+        android:layout_below="@+id/txthouse1bedroom"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    
+    <TextView
+        android:id="@+id/txthouse1address"
+        android:layout_below="@+id/txthouse1bedroomanswer"
+        android:text="Address"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+      <TextView
+        android:id="@+id/txthouse1addressanswer"
+        android:layout_below="@+id/txthouse1address"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/txthouse1detialbathroom"
+        android:layout_below="@+id/txthouse1addressanswer"
+        android:text="Bathroom"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/txthouse1bathroomanswer"
+        android:layout_below="@+id/txthouse1detialbathroom"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/txthouse1rentfees"
+        android:layout_below="@+id/txthouse1bathroomanswer"
+        android:text="Rent Fees"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/txthouse1rentfeesanswer"
+        android:layout_below="@+id/txthouse1rentfees"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/house1moredesciption"
+        android:text="This house is for rent about $500 perweek. this house is in the Albany center. It is very near the bus stop, and go to city center just need 30min by bus."
+        android:layout_below="@+id/txthouse1rentfeesanswer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+          android:id="@+id/housemap"
+          android:layout_below="@+id/house1moredesciption"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          class="com.google.android.gms.maps.MapFragment" />
+
+    <Button
+        android:id="@+id/house1share"
+        android:layout_below="@+id/housemap"
+        android:text="Share Albany 10"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/house1sendmessge"
+        android:layout_below="@+id/house1share"
+        android:text="Send Message To Agent"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnadditem"
+        android:text="additem"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btndelete"
+        android:layout_below="@id/house1sendmessge"
+        android:text="delete"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+</RelativeLayout>
