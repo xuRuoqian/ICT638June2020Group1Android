@@ -64,6 +64,7 @@
     <Compile Include="activity\House1.cs" />
     <Compile Include="activity\house1navigation.cs" />
     <Compile Include="activity\Menu.cs" />
+    <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
