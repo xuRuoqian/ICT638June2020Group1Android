@@ -2,60 +2,258 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Xamarin.Essentials;
+using System.Net;
+using System.Net.Http;
 using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using System.Threading.Tasks;
+using Xamarin.Essentials;
+using System.IO;
+using Newtonsoft.Json;
+using Android.Gms.Maps;
+using Android.Gms.Maps.Model;
+using ICT638July2020Group1Android.Models;
 
-namespace ICT638July2020Group1Android.activity
+namespace ICT638July2020Group1Android   
 {
     [Activity(Label = "Profile")]
-    public class Profile : Activity
+    public class Profile : Fragment
     {
-        private string recipients;
-        protected override void OnCreate(Bundle savedInstanceState)
+        private int profileid;
+        private TextView txt_fname, txt_lname, txt_pn, txt_address, txt_country;
+        private Button btn_share, btn_send, btn_save, btn_map;
+        private User users;
+        Agentdetial agent2 = new Agentdetial();
+        public Profile(int id)
         {
-            base.OnCreate(savedInstanceState);
-            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
-
-
-
-            Button btndesciption_share = FindViewById<Button>(Resource.Id.profile_share);
-            btndesciption_share.Click += Desciptionshare_Click;
-            Button btndesciption_sms = FindViewById<Button>(Resource.Id.profile_sms);
-            btndesciption_sms.Click += Desciptionsms_Click;
-            
+            profileid = id;
         }
-
-        private async void Desciptionshare_Click(object sender, EventArgs e)
+        public string getQuotedString(string str)
         {
-            TextView tv = FindViewById<TextView>(Resource.Id.profile_text);
-            await Share.RequestAsync(new ShareTextRequest
+            return "\"" + str + "\"";
+        }
+        public void getProfileDetail()
+        {
+            string url = "https://localhost:5001/api/users" + profileid;
+            var httpWebRequest = new HttpWebRequest(new Uri(url));
+            //var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+            httpWebRequest.ServerCertificateValidationCallback = delegate { return true; };
+            //httpWebRequest.ServerCertificateCustomValidationCallback = delegate { return true; }
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Method = "GET";
+
+            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
-                Text = tv.Text,
-                Title = "share Text"
-            });
+                var result = streamReader.ReadToEnd();
+                users = JsonConvert.DeserializeObject<User>(result);
+            }
+
+
         }
 
-        private async void Desciptionsms_Click(object sender, EventArgs e)
+
+        public void getAgentDetail()
         {
-            TextView tv = FindViewById<TextView>(Resource.Id.desciption_text);
+            string url = "https://localhost:5001/api/Agentdetials/5";
+            var httpWebRequest = new HttpWebRequest(new Uri(url));
+            //var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+            httpWebRequest.ServerCertificateValidationCallback = delegate { return true; };
+            //httpWebRequest.ServerCertificateCustomValidationCallback = delegate { return true; }
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Method = "GET";
+
+            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                var result = streamReader.ReadToEnd();
+                agent2 = JsonConvert.DeserializeObject<Agentdetial>(result);
+            }
+
+
+        }
+
+
+        public void OnMapReady(GoogleMap googleMap)
+        {
+            googleMap.MapType = GoogleMap.MapTypeNormal;
+            googleMap.UiSettings.ZoomControlsEnabled = true;
+            googleMap.UiSettings.CompassEnabled = true;
+
+            getCurrentLoc(googleMap);
+        }
+
+        public async void getCurrentLoc(GoogleMap googleMap)
+        {
+            Console.WriteLine("Test - CurrentLoc");
             try
             {
-                var message = new SmsMessage(tv.Text, recipients);
-                await Sms.ComposeAsync(message);
+                var request = new GeolocationRequest(GeolocationAccuracy.Best);
+                var location = await Geolocation.GetLocationAsync(request);
+
+                if (location != null)
+                {
+                    Console.WriteLine($"current Loc - Latitude: {location.Latitude}, Longitude: {location.Longitude}, Altitude: {location.Altitude}");
+                    MarkerOptions curLoc = new MarkerOptions();
+                    curLoc.SetPosition(new LatLng(location.Latitude, location.Longitude));
+
+
+                    var address = await Geocoding.GetPlacemarksAsync(location.Latitude, location.Longitude);
+                    var placemark = address?.FirstOrDefault();
+                    var geocodeAddress = "";
+                    if (placemark != null)
+                    {
+                        geocodeAddress =
+                            $"AdminArea:       {placemark.AdminArea}\n" +
+                            $"CountryCode:     {placemark.CountryCode}\n" +
+                            $"CountryName:     {placemark.CountryName}\n" +
+                            $"FeatureName:     {placemark.FeatureName}\n" +
+                            $"Locality:        {placemark.Locality}\n" +
+                            $"PostalCode:      {placemark.PostalCode}\n" +
+                            $"SubAdminArea:    {placemark.SubAdminArea}\n" +
+                            $"SubLocality:     {placemark.SubLocality}\n" +
+                            $"SubThoroughfare: {placemark.SubThoroughfare}\n" +
+                            $"Thoroughfare:    {placemark.Thoroughfare}\n";
+
+                    }
+
+
+                    curLoc.SetTitle("You are here");// + geocodeAddress);
+                    curLoc.SetIcon(BitmapDescriptorFactory.DefaultMarker(BitmapDescriptorFactory.HueAzure));
+
+                    googleMap.AddMarker(curLoc);
+
+
+                    CameraPosition.Builder builder = CameraPosition.InvokeBuilder();
+                    builder.Target(new LatLng(location.Latitude, location.Longitude));
+                    builder.Zoom(18);
+                    builder.Bearing(155);
+                    builder.Tilt(65);
+
+                    CameraPosition cameraPosition = builder.Build();
+
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.NewCameraPosition(cameraPosition);
+
+                    googleMap.MoveCamera(cameraUpdate);
+                }
+
             }
-            catch (FeatureNotSupportedException ex)
+            catch (FeatureNotSupportedException fnsEx)
             {
-                // Sms is not supported on this device.
+                // Handle not supported on device exception
+                Toast.MakeText(Activity, "Feature Not Supported", ToastLength.Short);
             }
-            catch (Exception ex)
+            catch (FeatureNotEnabledException fneEx)
             {
-                // Other error has occurred.
+                // Handle not enabled on device exception
+                Toast.MakeText(Activity, "Feature Not Enabled", ToastLength.Short);
             }
+            catch (PermissionException pEx)
+            {
+                // Handle permission exception
+                Toast.MakeText(Activity, "Needs more permission", ToastLength.Short);
+            }
+        }
+
+
+
+
+
+
+
+
+
+        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        {
+            View view = inflater.Inflate(Resource.Layout.profile, container, false);
+            base.OnCreate(savedInstanceState);
+            txt_fname = Activity.FindViewById<TextView>(Resource.Id.txt_profile_fname);
+            txt_lname = Activity.FindViewById<TextView>(Resource.Id.txt_profile_lname);
+            txt_pn = Activity.FindViewById<TextView>(Resource.Id.txt_profile_phoneNum);
+            txt_address = Activity.FindViewById<TextView>(Resource.Id.txt_profile_address);
+            txt_country = Activity.FindViewById<TextView>(Resource.Id.txt_profile_country);
+            btn_share = Activity.FindViewById<Button>(Resource.Id.btn_profile_share);
+            //btn_save = Activity.FindViewById<Button>(Resource.Id.btn_profile_save);
+            btn_send = Activity.FindViewById<Button>(Resource.Id.btn_profile_sendMessage);
+
+
+            users.Fname = txt_fname.Text;
+            users.Lname = txt_lname.Text;
+            users.PhoneNum = txt_pn.Text;
+            users.Address = txt_address.Text;
+            users.Country = txt_country.Text;
+            string agpn = agent2.agentphonenumber.ToString();
+
+
+
+            btn_save.Click += async delegate
+            {
+                // if (httpResponse.StatusCode == System.Net.HttpStatusCode.Accepted)
+                // {
+                //   Toast.MakeText(Activity, "Your feedback was saved", ToastLength.Long).Show();
+                // }
+                //否则失败
+                //  else
+                //  {
+                //   Toast.MakeText(Activity, "Your feedback was  not saved", ToastLength.Long).Show();
+                // }
+            };
+
+            btn_send.Click += async (sender, e) =>
+            {
+
+                try
+                {
+
+                    string messagetext = "Hi, please find my contact details as requested. Email" +
+                                    txt_address.Text + "Phone Number" + txt_pn.Text;
+                    var message = new SmsMessage(messagetext, agpn);
+
+
+                    await Sms.ComposeAsync(message);
+                }
+                catch (FeatureNotSupportedException ex)
+                {
+                    // Sms is not supported on this device.
+                }
+                catch (Exception ex)
+                {
+                    // Other error has occurred.
+                }
+            };
+
+            btn_share.Click += async (sender, e) =>
+            {
+                await Share.RequestAsync(new ShareTextRequest
+                {
+                    Text = "Name: " + txt_fname.Text + txt_lname.Text + "\n" +
+                                  "Phone Number" + txt_pn.Text + "\n"
+                                  + "Address" + txt_address + "\n"
+                                  + "Country" + txt_country + "\n",
+                    Title = "Share Text"
+                });
+            };
+
+            return view;
+        }
+
+
+
+        public override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+            var mapFrag = MapFragment.NewInstance();// mapOptions);
+
+            FragmentManager.BeginTransaction()
+                                    .Add(Resource.Id.profilemap, mapFrag, "map_fragment")
+                                    .Commit();
+
+            mapFrag.GetMapAsync((IOnMapReadyCallback)this);
+
         }
 
     }
