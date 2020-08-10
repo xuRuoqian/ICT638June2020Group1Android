@@ -99,6 +99,7 @@
     <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_round.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="models\" />
     <Folder Include="Resources\drawable\" />
   </ItemGroup>
   <ItemGroup>
