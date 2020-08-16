@@ -12,25 +12,27 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using ICT638July2020Group1Android.models;
+using ICT638July2020Group1Android.Models;
 using Newtonsoft.Json;
 
 namespace ICT638July2020Group1Android.activity
 {
-    [Activity(Label ="Menu"]
+    [Activity(Label ="Menu")]
     public class Menu : ListActivity
 
     {
-        House houses = new House();
-
-
-
+        
+        private List<House> House2 = new List<House>();
+        private List<User> user2 = new List<User>();
+        private List<Agentdetial> agentdetial2 = new List<Agentdetial>();
+        int userId;
         public string getQuotedString(string str)
         {
             return "\"" + str + "\"";
         }
         public void getHouseDetail()
         {
-            string url = "https://localhost:5001/api/Houses";
+            string url = "https://10.0.2.2:5001/api/Houses";
             var httpWebRequest = new HttpWebRequest(new Uri(url));
             //var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             httpWebRequest.ServerCertificateValidationCallback = delegate { return true; };
@@ -42,37 +44,40 @@ namespace ICT638July2020Group1Android.activity
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
                 var result = streamReader.ReadToEnd();
-                houses = JsonConvert.DeserializeObject<House>(result);
+                House2 = JsonConvert.DeserializeObject<List<House>>(result);
             }
 
             
         }
+
+    
+
 
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
-
-            House[] items = new House[100];
-            String[] names = new string[100];
-            for (int i = 0; i < 100; i++)
-            {
-                if(items[i] != null)
-                {
-                    names[i] = items[i].title;
-                }
-            }
+            userId=Intent.GetIntExtra("userId", 1); 
+            getHouseDetail();
+            String[] item = new string[House2.Count];
+            int i = 0;
+            foreach (House h in House2)
+                item[i++] = h.title;
 
 
-            new ArrayAdapter<string>(this, Resource.Layout.menu, names);
+
+            ListAdapter = new ArrayAdapter<string>(this, Resource.Layout.list_item, item);
 
             ListView.TextFilterEnabled = true;
-            //TextView btnhouse1 = FindViewById<Button>(Resource.Id.textView2inList);
 
             ListView.ItemClick += delegate (object sender, AdapterView.ItemClickEventArgs args)
             {
                 Intent house1Intent = new Intent(this, typeof(house1navigation));
+                i = args.Position;
+                house1Intent.PutExtra("houseId", House2[i].id);
+                house1Intent.PutExtra("agentId", House2[i].AgentID);
+                house1Intent.PutExtra("userId", userId);
                 StartActivity(house1Intent);
             };
 

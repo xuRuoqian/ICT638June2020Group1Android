@@ -12,21 +12,22 @@ using ICT638July2020Group1Android.models;
 using Newtonsoft.Json;
 using Android.Gms.Maps;
 using Android.Gms.Maps.Model;
+using ICT638July2020Group1Android.Models;
 
 namespace ICT638July2020Group1Android
 
 {
     [Activity(Label = "agentActivity")]
 
-    public class Agent : Fragment
+    public class Agent : Fragment, IOnMapReadyCallback
     {
         private User user1;
         private int agentid;
-        private TextView txt_Fname, txt_Lname;
+        //private TextView txt_Fname, txt_Lname;
         private Agentdetial agent1;
         private TextView txt_name, txt_emailAddress, txt_phoneNum;
         
-        private Button btn_share, btn_sendMessage, btn_map;
+        private Button btn_share, btn_sendMessage;
         public Agent(int id)
         {
             agentid = id;
@@ -38,7 +39,7 @@ namespace ICT638July2020Group1Android
         }
         public void getAgentDetail()
         {
-            string url = "https://localhost:5001/api/Agentdetial"+agentid;
+            string url = "https://10.0.2.2:5001/api/Agentdetials/"+agentid;
             var httpWebRequest = new HttpWebRequest(new Uri(url));
             //var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             httpWebRequest.ServerCertificateValidationCallback = delegate { return true; };
@@ -140,7 +141,7 @@ namespace ICT638July2020Group1Android
 
         public void Btnupdateagent()
         {
-            string url = "https://localhost:5001/api/agentdetials";
+            string url = "https://10.0.2.2:5001/api/agentdetials";
             var httpWebRequest = new HttpWebRequest(new Uri(url));
             //var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             httpWebRequest.ServerCertificateValidationCallback = delegate { return true; };
@@ -166,85 +167,7 @@ namespace ICT638July2020Group1Android
                 var result = streamReader.ReadToEnd();
             }
         }
-        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-        {
-            View view = inflater.Inflate(Resource.Layout.agent, container, false);
 
-
-            btn_share = Activity.FindViewById<Button>(Resource.Id.btn_agent_share);
-
-            btn_sendMessage = Activity.FindViewById<Button>(Resource.Id.btn_agent_sendMessage);
-            txt_name = Activity.FindViewById<TextView>(Resource.Id.txt_agent_name);
-            txt_emailAddress = Activity.FindViewById<TextView>(Resource.Id.txt_agent_emailAddress);
-            txt_phoneNum = Activity.FindViewById<TextView>(Resource.Id.txt_agent_PhoneNum);
-
-            Button btnupdateagent = Activity.FindViewById<Button>(Resource.Id.btnupdateagent);
-            btnupdateagent.Click += Btnupdateagent_Click; 
-
-            txt_name.Text = agent1.name.ToString();
-            txt_emailAddress.Text = agent1.agentaddress.ToString();
-            txt_phoneNum.Text = agent1.agentphonenumber.ToString();
-            txt_Fname.Text = user1.Fname.ToString();
-            txt_Lname.Text = user1.Lname.ToString();
-
-
-
-
-            void Btnupdateagent_Click(object sender, EventArgs e)
-
-            {
-                Btnupdateagent();
-            }
-
-            btn_share.Click += (sender, e) =>
-            {
-
-                string description = "Name: " + txt_name.Text + "\n"
-                                       + "emailAddress: " + txt_emailAddress.Text + "\n"
-                                       + "Phone Number: " + txt_phoneNum.Text + "\n";
-
-                ShareText(description);
-            };
-
-            btn_sendMessage.Click += (sender, e) =>
-            {
-
-                var request = HttpWebRequest.Create(string.Format(@"http://localhost:5001/api/Users"));
-                request.ContentType = "application/json";
-                request.Method = "GET";
-
-                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
-                {
-
-                    if (response.StatusCode != HttpStatusCode.OK)
-                        Console.Out.WriteLine("Error fetching data. Server returned status code: {0}", response.StatusCode);
-
-                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
-                    {
-
-                        var content = reader.ReadToEnd();
-
-                        if (string.IsNullOrWhiteSpace(content))
-                        {
-                            Console.Out.WriteLine("Response contained empty body...");
-                        }
-
-                        else
-                        {
-                            Console.Out.WriteLine("Response Body: \r\n {0}", content);
-                        }
-                    }
-                }
-
-
-                string message = "Hi, I am " + txt_Fname.Text + txt_Lname.Text + "saw your details on the Rent-a-go app,"
-                                  + "Could you please send me details of more houses for rent in the same price range?";
-                string phoneNumber = txt_phoneNum.Text;
-
-                SendSms(message, phoneNumber);
-            };
-            return view;
-        }
 
 
 
@@ -258,33 +181,88 @@ namespace ICT638July2020Group1Android
         }
 
 
-        public async Task SendSms(string messageText, string recipient)
+       
+        public override void OnActivityCreated(Bundle savedInstanceState)
         {
-            try
-            {
-                var message = new SmsMessage(messageText, new[] { recipient });
-                await Sms.ComposeAsync(message);
-            }
-            catch (FeatureNotSupportedException ex)
-            {
-                // Sms is not supported on this device.
-            }
-            catch (Exception ex)
-            {
-                // Other error has occurred.
-            }
-        }
-        public override void OnCreate(Bundle savedInstanceState)
-        {
-            base.OnCreate(savedInstanceState);
+            base.OnActivityCreated(savedInstanceState);
             var mapFrag = MapFragment.NewInstance();// mapOptions);
 
-            FragmentManager.BeginTransaction()
+            ChildFragmentManager.BeginTransaction()
                                     .Add(Resource.Id.agentmap, mapFrag, "map_fragment")
                                     .Commit();
 
-            mapFrag.GetMapAsync((IOnMapReadyCallback)this);
+            mapFrag.GetMapAsync(this);
 
+           
+            btn_share = Activity.FindViewById<Button>(Resource.Id.btn_agent_share);
+
+            btn_sendMessage = Activity.FindViewById<Button>(Resource.Id.btn_agent_sendMessage);
+            txt_name = Activity.FindViewById<TextView>(Resource.Id.txt_agent_name);
+            txt_emailAddress = Activity.FindViewById<TextView>(Resource.Id.txt_agent_emailAddress);
+            txt_phoneNum = Activity.FindViewById<TextView>(Resource.Id.txt_agent_PhoneNum);
+
+            Button btnupdateagent = Activity.FindViewById<Button>(Resource.Id.btnupdateagent);
+
+           // TextView userFname = Activity.FindViewById<TextView>(Resource.Id.txt_profile_fname);
+           // TextView userLname = Activity.FindViewById<TextView>(Resource.Id.txt_profile_lname);
+
+            getAgentDetail();
+
+            txt_name.Text = agent1.name.ToString();
+            txt_emailAddress.Text = agent1.agentaddress.ToString();
+            txt_phoneNum.Text = agent1.agentphonenumber.ToString();
+           // txt_Fname.Text = userFname.Text;
+          //  txt_Lname.Text = userLname.Text;
+
+
+            btnupdateagent.Click += (sender, e) =>
+            {
+                Btnupdateagent();
+            };
+
+
+
+
+
+            btn_share.Click += (sender, e) =>
+            {
+
+                string description = "Name: " + txt_name.Text + "\n"
+                                       + "emailAddress: " + txt_emailAddress.Text + "\n"
+                                       + "Phone Number: " + txt_phoneNum.Text + "\n";
+
+                ShareText(description);
+            };
+
+            btn_sendMessage.Click += async (sender, e) =>
+            {
+                string userFname = "Haoli.";
+                string userLname = "Lu";
+                try
+                {
+                    
+                    string messagetext = "Hi, I am " + userFname + userLname + " saw your details on the Rent-a-go app, "
+                                      + "Could you please send me details of more houses for rent in the same price range?";
+                    var message = new SmsMessage(messagetext, txt_phoneNum.Text);// 
+
+
+                    await Sms.ComposeAsync(message);
+                }
+                catch (FeatureNotSupportedException ex)
+                {
+                    // Sms is not supported on this device.
+                }
+                catch (Exception ex)
+                {
+                    // Other error has occurred.
+                }
+            };
+
+        }
+        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        {
+            View view = inflater.Inflate(Resource.Layout.agent1, container, false);
+            return view;
         }
     }
 }

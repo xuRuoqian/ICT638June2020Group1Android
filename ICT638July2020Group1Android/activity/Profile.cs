@@ -17,15 +17,16 @@ using Newtonsoft.Json;
 using Android.Gms.Maps;
 using Android.Gms.Maps.Model;
 using ICT638July2020Group1Android.Models;
+using ICT638July2020Group1Android.models;
 
 namespace ICT638July2020Group1Android   
 {
     [Activity(Label = "Profile")]
-    public class Profile : Fragment
+    public class Profile : Fragment, IOnMapReadyCallback
     {
         private int profileid;
         private TextView txt_fname, txt_lname, txt_pn, txt_address, txt_country;
-        private Button btn_share, btn_send, btn_save, btn_map;
+        private Button btn_share, btn_send, btn_save;
         private User users;
         Agentdetial agent2 = new Agentdetial();
         public Profile(int id)
@@ -36,9 +37,9 @@ namespace ICT638July2020Group1Android
         {
             return "\"" + str + "\"";
         }
-        public void getProfileDetail()
+       public void getProfileDetail()
         {
-            string url = "https://localhost:5001/api/users" + profileid;
+            string url = "https://10.0.2.2:5001/api/users/"+profileid;
             var httpWebRequest = new HttpWebRequest(new Uri(url));
             //var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             httpWebRequest.ServerCertificateValidationCallback = delegate { return true; };
@@ -57,25 +58,6 @@ namespace ICT638July2020Group1Android
         }
 
 
-        public void getAgentDetail()
-        {
-            string url = "https://localhost:5001/api/Agentdetials/5";
-            var httpWebRequest = new HttpWebRequest(new Uri(url));
-            //var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
-            httpWebRequest.ServerCertificateValidationCallback = delegate { return true; };
-            //httpWebRequest.ServerCertificateCustomValidationCallback = delegate { return true; }
-            httpWebRequest.ContentType = "application/json";
-            httpWebRequest.Method = "GET";
-
-            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            {
-                var result = streamReader.ReadToEnd();
-                agent2 = JsonConvert.DeserializeObject<Agentdetial>(result);
-            }
-
-
-        }
 
 
         public void OnMapReady(GoogleMap googleMap)
@@ -159,17 +141,19 @@ namespace ICT638July2020Group1Android
             }
         }
 
-
-
-
-
-
-
-
-
-        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        public override void OnActivityCreated(Bundle savedInstanceState)
         {
-            View view = inflater.Inflate(Resource.Layout.profile, container, false);
+            base.OnActivityCreated(savedInstanceState);
+            var mapFrag = MapFragment.NewInstance();// mapOptions);
+
+            ChildFragmentManager.BeginTransaction()
+                                    .Add(Resource.Id.profilemap, mapFrag, "map_fragment")
+                                    .Commit();
+
+            mapFrag.GetMapAsync(this);
+
+
+
             base.OnCreate(savedInstanceState);
             txt_fname = Activity.FindViewById<TextView>(Resource.Id.txt_profile_fname);
             txt_lname = Activity.FindViewById<TextView>(Resource.Id.txt_profile_lname);
@@ -181,37 +165,42 @@ namespace ICT638July2020Group1Android
             btn_send = Activity.FindViewById<Button>(Resource.Id.btn_profile_sendMessage);
 
 
-            users.Fname = txt_fname.Text;
-            users.Lname = txt_lname.Text;
-            users.PhoneNum = txt_pn.Text;
-            users.Address = txt_address.Text;
-            users.Country = txt_country.Text;
-            string agpn = agent2.agentphonenumber.ToString();
+            getProfileDetail();
 
 
 
-            btn_save.Click += async delegate
-            {
-                // if (httpResponse.StatusCode == System.Net.HttpStatusCode.Accepted)
-                // {
-                //   Toast.MakeText(Activity, "Your feedback was saved", ToastLength.Long).Show();
-                // }
-                //否则失败
-                //  else
-                //  {
-                //   Toast.MakeText(Activity, "Your feedback was  not saved", ToastLength.Long).Show();
-                // }
-            };
+            txt_fname.Text = users.Fname.ToString();
+            txt_lname.Text = users.Lname.ToString();
+            txt_pn.Text = users.PhoneNum.ToString();
+            txt_address.Text = users.Address.ToString();
+            txt_country.Text = users.Country.ToString();
+            // string agpn = agent2.agentphonenumber.ToString();
+
+
+
+            /* btn_save.Click += async delegate
+             {
+                 // if (httpResponse.StatusCode == System.Net.HttpStatusCode.Accepted)
+                 // {
+                 //   Toast.MakeText(Activity, "Your feedback was saved", ToastLength.Long).Show();
+                 // }
+                 //否则失败
+                 //  else
+                 //  {
+                 //   Toast.MakeText(Activity, "Your feedback was  not saved", ToastLength.Long).Show();
+                 // }
+             };*/
 
             btn_send.Click += async (sender, e) =>
             {
+                string recipient = "0212203665";
 
                 try
                 {
 
-                    string messagetext = "Hi, please find my contact details as requested. Email" +
-                                    txt_address.Text + "Phone Number" + txt_pn.Text;
-                    var message = new SmsMessage(messagetext, agpn);
+                    string messagetext = "Hi, please find my contact details as requested. Email " +
+                                    txt_address.Text + "Phone Number " + txt_pn.Text;
+                    var message = new SmsMessage(messagetext, recipient);
 
 
                     await Sms.ComposeAsync(message);
@@ -238,23 +227,16 @@ namespace ICT638July2020Group1Android
                 });
             };
 
+        }
+
+
+
+        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        {
+            View view = inflater.Inflate(Resource.Layout.profile1, container, false);
+
+
             return view;
         }
-
-
-
-        public override void OnCreate(Bundle savedInstanceState)
-        {
-            base.OnCreate(savedInstanceState);
-            var mapFrag = MapFragment.NewInstance();// mapOptions);
-
-            FragmentManager.BeginTransaction()
-                                    .Add(Resource.Id.profilemap, mapFrag, "map_fragment")
-                                    .Commit();
-
-            mapFrag.GetMapAsync((IOnMapReadyCallback)this);
-
-        }
-
     }
 }

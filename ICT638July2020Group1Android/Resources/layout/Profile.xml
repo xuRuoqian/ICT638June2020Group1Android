@@ -1,26 +1,64 @@
-﻿<?xml version="1.0" encoding="utf-8" ?> 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <TextView
+        android:text="First Name"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="50.0dp"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:id="@+id/txt_profile_fname" />
+    <TextView
+        android:text="Last Name"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="50.0dp"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:id="@+id/txt_profile_lname" />
+    <TextView
+        android:text="Phone Number"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="50.0dp"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:id="@+id/txt_profile_phoneNum" />
+    <TextView
+        android:text="Address"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="50.0dp"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:id="@+id/txt_profile_address" />
+    <TextView
+        android:text="Country"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="50.0dp"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:id="@+id/txt_profile_country" />
 
-        <TextView
-        android:id="@+id/profile_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="text" />
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+          android:id="@+id/profilemap"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          class="com.google.android.gms.maps.MapFragment" />
+    
     <Button
         android:text="Share"
-        android:id="@+id/profile_share"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_profile_share" />
     <Button
-        android:text="SMS"
-        android:id="@+id/profile_sms"
+        android:text="send message"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_profile_sendMessage" />
 
 </LinearLayout>

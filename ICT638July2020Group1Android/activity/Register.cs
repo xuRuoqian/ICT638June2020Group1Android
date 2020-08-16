@@ -46,7 +46,16 @@ namespace ICT638July2020Group1Android.activity
                 user.UserName = txt_username.Text;
                 user.Password = txt_password.Text;
                 //@insertlink
-                var request = HttpWebRequest.Create(string.Format(@"https://localhost:5001/api/users"));
+                //var request = HttpWebRequest.Create(string.Format(@"https://10.0.2.2:5001/api/users"));
+                //request.ContentType = "application/json";
+                //request.ServerCertificateValidationCallback = delegate { return true; };
+                //request.Method = "POST";
+
+                string url = "https://10.0.2.2:5001/api/users";
+                var request = new HttpWebRequest(new Uri(url));
+                //var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+                request.ServerCertificateValidationCallback = delegate { return true; };
+                //httpWebRequest.ServerCertificateCustomValidationCallback = delegate { return true; }
                 request.ContentType = "application/json";
                 request.Method = "POST";
 

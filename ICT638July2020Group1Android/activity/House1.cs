@@ -21,20 +21,20 @@ using Xamarin.Essentials;
 namespace ICT638July2020Group1Android.activity
 {
     [Activity(Label = "House1")]
-    public class House1 : Fragment
+    public class House1 : Fragment, IOnMapReadyCallback
     {
         private int houseId;
         private TextView txt_bedroom, txt_bathroom, text_address, txt_rentfees, txt_house1;
         private Button btn_share, btn_sendMessage, btn_map;
         private House house;
-        Agentdetial agent2 = new Agentdetial();
+        private Agentdetial agent;
         public House1(int id)
         {
             houseId = id;
         }
 
 
-            
+
 
 
 
@@ -44,7 +44,7 @@ namespace ICT638July2020Group1Android.activity
         }
         public void getHouseDetail()
         {
-            string url = "https://localhost:5001/api/Houses" + houseId;
+            string url = "https://10.0.2.2:5001/api/Houses/" + houseId;
             var httpWebRequest = new HttpWebRequest(new Uri(url));
             //var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             httpWebRequest.ServerCertificateValidationCallback = delegate { return true; };
@@ -61,11 +61,9 @@ namespace ICT638July2020Group1Android.activity
 
 
         }
-
-
         public void getAgentDetail()
         {
-            string url = "https://localhost:5001/api/Agentdetial";
+            string url = "https://10.0.2.2:5001/api/Agentdetials/" + house.AgentID;
             var httpWebRequest = new HttpWebRequest(new Uri(url));
             //var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             httpWebRequest.ServerCertificateValidationCallback = delegate { return true; };
@@ -77,7 +75,7 @@ namespace ICT638July2020Group1Android.activity
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
                 var result = streamReader.ReadToEnd();
-                agent2 = JsonConvert.DeserializeObject<Agentdetial>(result);
+                agent = JsonConvert.DeserializeObject<Agentdetial>(result);
             }
 
 
@@ -167,7 +165,7 @@ namespace ICT638July2020Group1Android.activity
         public void Btndelete()
         {
             //insert link
-            string url = "https://localhost:5001/api/Houses/5";
+            string url = "https://10.0.2.2:5001/api/Houses/5";
             var httpWebRequest = new HttpWebRequest(new Uri(url));
             //var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             httpWebRequest.ServerCertificateValidationCallback = delegate { return true; };
@@ -200,7 +198,7 @@ namespace ICT638July2020Group1Android.activity
         public void Btnadditem()
         {
             //insert link
-            string url = "https://localhost:5001/api/Houses";
+            string url = "https://10.0.2.2:5001/api/Houses";
             var httpWebRequest = new HttpWebRequest(new Uri(url));
             //var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             httpWebRequest.ServerCertificateValidationCallback = delegate { return true; };
@@ -230,65 +228,60 @@ namespace ICT638July2020Group1Android.activity
             }
         }
 
-        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        public override void OnActivityCreated(Bundle savedInstanceState)
         {
-            View view = inflater.Inflate(Resource.Layout.house1, container, false);
+            base.OnActivityCreated(savedInstanceState);
+
+            var mapFrag = MapFragment.NewInstance();// mapOptions);
+
+            ChildFragmentManager.BeginTransaction()
+                                    .Add(Resource.Id.housemap, mapFrag, "map_fragment")
+                                    .Commit();
+
+            mapFrag.GetMapAsync(this);
+
             btn_share = Activity.FindViewById<Button>(Resource.Id.house1share);
             btn_sendMessage = Activity.FindViewById<Button>(Resource.Id.house1sendmessge);
             txt_bedroom = Activity.FindViewById<TextView>(Resource.Id.txthouse1bedroomanswer);
             txt_bathroom = Activity.FindViewById<TextView>(Resource.Id.txthouse1bathroomanswer);
             txt_rentfees = Activity.FindViewById<TextView>(Resource.Id.txthouse1rentfeesanswer);
             text_address = Activity.FindViewById<TextView>(Resource.Id.txthouse1addressanswer);
-            
-            txt_house1 = Activity.FindViewById<TextView>(Resource.Id.txthouse1);
 
+            txt_house1 = Activity.FindViewById<TextView>(Resource.Id.txthouse1);
+            //btn_sendMessage.Click += Btn_sendMessage_Click; 
 
             Button btndelete = Activity.FindViewById<Button>(Resource.Id.btndelete);
-            btndelete.Click += Btndelete_Click;
+
 
             Button btnadditem = Activity.FindViewById<Button>(Resource.Id.btndelete);
-            btnadditem.Click += Btnadditem_Click;
+
+            getHouseDetail();
+            getAgentDetail();
 
             text_address.Text = house.Address.ToString();
             txt_rentfees.Text = house.weeklyRent.ToString();
             txt_bedroom.Text = house.numBedrooms.ToString();
             txt_bathroom.Text = house.numBathrooms.ToString();
             txt_house1.Text = house.title.ToString();
-            string agpn = agent2.agentphonenumber.ToString();
+            //string agpn = agent2.agentphonenumber.ToString();
 
-
-            void Btndelete_Click(object sender, EventArgs e)
+            btndelete.Click += (sender, e) =>
             {
                 Btndelete();
-            }
+            };
 
-            void Btnadditem_Click(object sender, EventArgs e)
+            btnadditem.Click += (sender, e) =>
             {
                 Btnadditem();
-            }
+            };
 
 
-            btn_sendMessage.Click += async (sender, e) =>
+
+
+            btn_sendMessage.Click +=  (sender, e) =>
             {
+                sendmessageAsync();
 
-                try
-                {
-
-                    string messagetext = "Hi, I am interested in the house at " + text_address.Text + " you have posted for rent."
-                                       + "Could I please have more details?";
-                    var message = new SmsMessage(messagetext, agpn);
-
-
-                    await Sms.ComposeAsync(message);
-                }
-                catch (FeatureNotSupportedException ex)
-                {
-                    // Sms is not supported on this device.
-                }
-                catch (Exception ex)
-                {
-                    // Other error has occurred.
-                }
             };
 
             btn_share.Click += async (sender, e) =>
@@ -302,59 +295,38 @@ namespace ICT638July2020Group1Android.activity
                     Title = txt_house1.Text
                 });
             };
+        }
+
+        public async System.Threading.Tasks.Task sendmessageAsync()
+        {
+            try
+            {
+
+                string messagetext = "Hi, I am interested in the house at " + text_address.Text + " you have posted for rent."
+                                   + "Could I please have more details?";
+                var message = new SmsMessage(messagetext, agent.agentphonenumber);//, agpn);
 
 
+                await Sms.ComposeAsync(message);
+            }
+            catch (FeatureNotSupportedException ex)
+            {
+                // Sms is not supported on this device.
+            }
+            catch (Exception ex)
+            {
+                // Other error has occurred.
+            }
+        }
+            
+        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        {
+
+            View view = inflater.Inflate(Resource.Layout.house1, container, false);
 
             return view;
         }
 
 
-
-
-
-
-
-        //  RecyclerView house1RecycleView;
-        // RecyclerView.LayoutManager house1LayoutManager;
-        //  House1photoAlbum house1photoAlbum;
-        // House1photoAdapter house1photoAdapter;
-
-        public override void OnCreate(Bundle savedInstanceState)
-        {
-            base.OnCreate(savedInstanceState);
-            var mapFrag = MapFragment.NewInstance();// mapOptions);
-
-            FragmentManager.BeginTransaction()
-                                    .Add(Resource.Id.housemap, mapFrag, "map_fragment")
-                                    .Commit();
-
-            mapFrag.GetMapAsync((IOnMapReadyCallback)this);
-
-
-            /* house1photoAlbum = new House1photoAlbum();
-             house1LayoutManager = new LinearLayoutManager(Activity);
-
-
-
-             house1photoAdapter = new House1photoAdapter(house1photoAlbum);
-             house1photoAdapter.ItemClick += MAdapter_ItemClick;
-
-
-
-            // house1RecycleView = Activity.FindViewById<RecyclerView>(Resource.Id.house1recyclerView);
-             house1RecycleView.SetLayoutManager(house1LayoutManager);
-             house1RecycleView.SetAdapter(house1photoAdapter);*/
-
-
-            //TextView
-
-
-
-        }
-        /* private void MAdapter_ItemClick(object sender, int e)
-         {
-             int photoNum = e + 1;
-             Toast.MakeText(Activity, "This is photo number " + photoNum, ToastLength.Short).Show();
-         }*/
     }
 }
